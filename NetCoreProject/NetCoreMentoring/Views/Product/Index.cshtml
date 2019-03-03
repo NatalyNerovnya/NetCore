@@ -1,0 +1,40 @@
+﻿@model NetCoreMentoring.Models.ProductsViewModel
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<h1>Products</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>QuantityPerUnit</th>
+            <th>Supplier</th>
+            <th>Category</th>
+            <th>UnitPrice</th>
+            <th>UnitsOnOrder</th>
+            <th>UnitsInStock</th>
+            <th>ReorderLevel</th>
+            <th>Discontinued</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var product in Model.Products) {
+        <tr>
+            <td>@product.Id</td>
+            <td>@product.Name</td>
+            <td>@product.QuantityPerUnit</td>
+            <td>@product.SupplierName</td>
+            <td>@product.CategoryName</td>
+            <td>@product.UnitPrice</td>
+            <td>@product.UnitsOnOrder</td>
+            <td>@product.UnitsInStock</td>
+            <td>@product.ReorderLevel</td>
+            <td>@product.Discontinued</td>
+        </tr>
+}
+    </tbody>
+</table>
