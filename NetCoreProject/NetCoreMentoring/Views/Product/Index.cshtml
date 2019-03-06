@@ -5,7 +5,9 @@
 }
 
 <h1>Products</h1>
-
+<br>
+<a class="btn btn-primary" asp-action="Add">Add product</a>
+<br>
 <table class="table">
     <thead>
         <tr>
@@ -19,6 +21,7 @@
             <th>UnitsInStock</th>
             <th>ReorderLevel</th>
             <th>Discontinued</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -34,6 +37,7 @@
             <td>@product.UnitsInStock</td>
             <td>@product.ReorderLevel</td>
             <td>@product.Discontinued</td>
+            <td><a asp-action="Edit" asp-route-productId=@product.Id>Edit</a></td>
         </tr>
 }
     </tbody>
