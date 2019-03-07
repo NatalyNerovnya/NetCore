@@ -2,8 +2,9 @@
 
 <h1>Categories</h1>
 
-
-@foreach (var category in Model.Categories)
-{
-    <div>@category.Name</div>
-}
+<ul class="list-group categories">
+    @foreach (var category in Model.Categories)
+    {
+        <li class="list-group-item">@category.Name</li>
+    }
+</ul>
