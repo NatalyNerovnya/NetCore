@@ -2,28 +2,28 @@
 using System.Collections.Generic;
 using System.Linq;
 using Common.EntityFramework;
-using Common.Repositories;
-using Microsoft.Extensions.Configuration;
 using Product = Common.Models.Product;
+using Common.Repositories;
+using Common.Settings;
 
 namespace Common.Services
 {
     public class ProductService : IProductService
     {
-        private readonly IConfiguration _configuration;
+        private readonly ISettings _settings;
         private readonly IProductRepository _productRepository;
 
-        public ProductService(IConfiguration configuration, IProductRepository productRepository)
+        public ProductService(ISettings settings, IProductRepository productRepository)
         {
-            _configuration = configuration;
+            _settings = settings;
             _productRepository = productRepository;
         }
         public IEnumerable<Product> GetProducts()
         {
             var dtos = _productRepository.GetProducts().ToArray();
-            var productsNumber = _configuration.GetValue<int>("ProductsNumber");
+            var productsNumber = _settings.GetMaxProductsNumber();
 
-            if (productsNumber == 0)
+            if (productsNumber <= 0)
             {
                 productsNumber = dtos.Length;
             }

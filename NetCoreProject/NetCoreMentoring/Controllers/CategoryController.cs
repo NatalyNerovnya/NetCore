@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NetCoreMentoring.Models;
-using Common.Models;
-using System.Collections.Generic;
 using Common.Services;
 
 namespace NetCoreMentoring.Controllers

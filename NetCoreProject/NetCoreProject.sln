@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCoreMentoring", "NetCoreMentoring\NetCoreMentoring.csproj", "{98F4F771-481C-4FE8-A25D-B24EEF71B9E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCoreMentoring", "NetCoreMentoring\NetCoreMentoring.csproj", "{98F4F771-481C-4FE8-A25D-B24EEF71B9E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{74BA914A-2DEC-4C3A-BFAF-06F092242BF8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{74BA914A-2DEC-4C3A-BFAF-06F092242BF8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
