@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace NetCoreMentoring
 {
@@ -50,20 +51,7 @@ namespace NetCoreMentoring
                 {
                     errorApp.Run(async context =>
                     {
-                        context.Response.StatusCode = 500;
-                        context.Response.ContentType = "text/html";
-
-                        await context.Response.WriteAsync("<html lang=\"en\"><body>\r\n");
-                        await context.Response.WriteAsync("ERROR!<br>Please find more information in the log file<br>\r\n");
-
-                        var exceptionHandlerPathFeature =
-                            context.Features.Get<IExceptionHandlerPathFeature>();
-                        _logger.LogError(exceptionHandlerPathFeature.Error, "Error is handled by custom handler.");
-
-                        await context.Response.WriteAsync(exceptionHandlerPathFeature.Error.Message);                        
-                        await context.Response.WriteAsync("<br><br><a href=\"/\">Home</a><br>\r\n");
-                        await context.Response.WriteAsync("</body></html>\r\n");
-                        await context.Response.WriteAsync(new string(' ', 512)); // IE padding
+                        await BuildCustomError(context);
                     });
                 });
             }
@@ -85,18 +73,36 @@ namespace NetCoreMentoring
             });
         }
 
+        private async Task BuildCustomError(HttpContext context)
+        {
+            context.Response.StatusCode = 500;
+            context.Response.ContentType = "text/html";
+
+            await context.Response.WriteAsync("<html lang=\"en\"><body>\r\n");
+            await context.Response.WriteAsync("ERROR!<br>Please find more information in the log file<br>\r\n");
+
+            var exceptionHandlerPathFeature =
+                context.Features.Get<IExceptionHandlerPathFeature>();
+            _logger.LogError(exceptionHandlerPathFeature.Error, "Error is handled by custom handler.");
+
+            await context.Response.WriteAsync(exceptionHandlerPathFeature.Error.Message);
+            await context.Response.WriteAsync("<br><br><a href=\"/\">Home</a><br>\r\n");
+            await context.Response.WriteAsync("</body></html>\r\n");
+            await context.Response.WriteAsync(new string(' ', 512)); // IE padding
+        }
+
         private void InjectDependences(IServiceCollection services)
         {
             var connection = Configuration.GetConnectionString("NorthwindConnectionString");
             services.AddDbContext<NorthwindContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connection));
 
-            services.AddScoped<ISettings, ConfigurationSettings>();
+            services.AddTransient<ISettings, ConfigurationSettings>();
 
-            services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<ICategoryService, CategoryService>();
 
-            services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped<IProductService, ProductService>();
+            services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<IProductService, ProductService>();
         }
     }
 }
