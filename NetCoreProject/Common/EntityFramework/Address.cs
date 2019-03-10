@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Common.EntityFramework
 {
+    //TODO: please add ability to create database from code. Add EF migration to create database on any environment
     public partial class Address
     {
         public Address()

@@ -4,6 +4,7 @@ using Common.Services;
 
 namespace NetCoreMentoring.Controllers
 {
+    //TODO: async all-the-way from controller to repository
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;

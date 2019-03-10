@@ -59,6 +59,7 @@ namespace Common.Services
 
         private Product BuildProduct(Products product)
         {
+            //TODO: configure and use automapper
             return new Product()
             {
                 Id = product.ProductId,

@@ -6,6 +6,7 @@ using System;
 
 namespace NetCoreMentoring
 {
+    //TODO: Refactor project structure. Introduce 3-layered architecture: UI - Domain - Data
     public class Program
     {
         public static void Main(string[] args)
@@ -15,6 +16,7 @@ namespace NetCoreMentoring
             {
                 var host = CreateWebHostBuilder(args).Build();
 
+                //TODO: use IApplicationLifetime to subscribe on app start/stop events
                 logger.Info($"Application is running: {AppDomain.CurrentDomain.BaseDirectory}");
                 host.Run();
             }

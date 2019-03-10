@@ -17,6 +17,7 @@ namespace NetCoreMentoring
 {
     public class Startup
     {
+        //TODO: access modifier, readonly
         ILogger<Startup> _logger;
 
         public Startup(IConfiguration configuration, ILogger<Startup> logger)
@@ -49,6 +50,10 @@ namespace NetCoreMentoring
             {
                 app.UseExceptionHandler(errorApp =>
                 {
+                    //TODO: remove, setup only exception handling path
+                    //TODO: move logging logic into error page, RequestId and last error can be retrieved from HttpContext
+                    //RequestId = HttpContext.TraceIdentifier;
+                    //var error = HttpContext.Features.Get<IExceptionHandlerFeature>()?.Error;
                     errorApp.Run(async context =>
                     {
                         await BuildCustomError(context);
@@ -75,6 +80,7 @@ namespace NetCoreMentoring
 
         private async Task BuildCustomError(HttpContext context)
         {
+            //TODO: remove this from startup, use custom error page
             context.Response.StatusCode = 500;
             context.Response.ContentType = "text/html";
 

@@ -5,8 +5,10 @@ using Product = Common.Models.Product;
 
 namespace NetCoreMentoring.Controllers
 {
+    //TODO: async all-the-way from controller to repository
     public class ProductController : Controller
     {
+        //TODO: readonly?
         private IProductService _productService;
 
         public ProductController(IProductService productService)
@@ -34,7 +36,9 @@ namespace NetCoreMentoring.Controllers
 
         [HttpPost]
         public IActionResult Add(Product product)
-        {
+        {   
+            //TODO: validation is missing?
+
             if (product != null)
             {
                 _productService.AddProduct(product);
@@ -59,6 +63,7 @@ namespace NetCoreMentoring.Controllers
                 return RedirectToAction("Edit", product.Id);
             }
 
+            //TODO: why product can be null? in any case if product is null you will get null-reference exception in statement above
             if (product != null)
             {
                 _productService.EditProduct(product);
