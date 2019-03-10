@@ -1,24 +1,21 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+using NetCoreProject.Common;
 using NetCoreProject.Domain.Installers;
-using System.Threading.Tasks;
 
 namespace NetCoreMentoring
 {
     public class Startup
     {
-        private readonly ILogger<Startup> _logger;
-
-        public Startup(IConfiguration configuration, ILogger<Startup> logger)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            _logger = logger;
         }
 
         public IConfiguration Configuration { get; }
@@ -33,7 +30,7 @@ namespace NetCoreMentoring
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().AddFluentValidation().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             InjectDependences(services);
         }
@@ -67,6 +64,8 @@ namespace NetCoreMentoring
         {
             var domainInstaller = new DomainInstaller(Configuration);
             domainInstaller.Install(services);
+
+            services.AddTransient<IValidator<Product>, ProductValidator>();
         }
     }
 }
