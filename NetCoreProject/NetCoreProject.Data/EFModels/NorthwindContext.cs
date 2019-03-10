@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace NetCoreProject.Data.EFModels
 {
@@ -41,6 +43,10 @@ namespace NetCoreProject.Data.EFModels
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=NorthW;Trusted_Connection=True;MultipleActiveResultSets=true");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
