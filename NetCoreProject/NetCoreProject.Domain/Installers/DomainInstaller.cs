@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NetCoreProject.Data.Common.Installers;
+using NetCoreProject.Domain.Infrastructure;
 using NetCoreProject.Domain.Interfaces;
 using NetCoreProject.Domain.Services;
 
@@ -23,6 +24,7 @@ namespace NetCoreProject.Domain.Installers
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<ISupplierService, SupplierService>();
             services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<ISettings, ConfigurationSettings>();
         }
     }
 }
