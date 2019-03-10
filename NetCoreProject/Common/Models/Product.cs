@@ -2,6 +2,7 @@
 
 namespace Common.Models
 {
+    //TODO: Remove data annotations, better use Fluent Validation
     public class Product
     {
         public int Id { get; set; }

@@ -5,6 +5,7 @@ namespace Common.Repositories
 {
     public class CategoryRepository : ICategoryRepository
     {
+        //TODO: readonly?
         private NorthwindContext _context;
 
         public CategoryRepository(NorthwindContext context)
@@ -12,6 +13,7 @@ namespace Common.Repositories
             _context = context;
         }
 
+        //TODO: make async
         public IEnumerable<Categories> GetAllCategories()
         {
             return _context.Categories;

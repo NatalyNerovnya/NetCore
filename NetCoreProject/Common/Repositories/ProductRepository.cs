@@ -14,11 +14,13 @@ namespace Common.Repositories
             _context = context;
         }
 
+        //TODO: make async
         public IEnumerable<Products> GetProducts()
         {
             return _context.Products;
         }
 
+        //TODO: make async
         public void AddProduct(Product product)
         {
             var productDto = BuildProductDto(product);
@@ -26,6 +28,7 @@ namespace Common.Repositories
             _context.SaveChanges();
         }
 
+        //TODO: make async
         public void EditProduct(Product product)
         {
             var productDto = BuildProductDto(product);
@@ -35,16 +38,19 @@ namespace Common.Repositories
             _context.SaveChanges();
         }
 
+        //TODO: make async
         public IEnumerable<Categories> GetCategories()
         {
             return _context.Categories;
         }
 
+        //TODO: make async
         public IEnumerable<Suppliers> GetSuppliers()
         {
             return _context.Suppliers;
         }
 
+        //TODO: make async
         public Products GetProductById(int productId)
         {
             return _context.Products.FirstOrDefault(x => x.ProductId == productId);

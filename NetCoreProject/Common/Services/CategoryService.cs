@@ -17,7 +17,8 @@ namespace Common.Services
         public IEnumerable<Category> GetAllCategories()
         {
             var dtos = _categoryRepository.GetAllCategories();
-
+            
+            //TODO: configure automapper
             return dtos.Select(x => new Category()
             {
                 Id = x.CategoryId,
