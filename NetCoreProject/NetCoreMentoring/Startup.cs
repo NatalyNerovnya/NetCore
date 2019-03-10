@@ -43,17 +43,7 @@ namespace NetCoreMentoring
         {
             if (env.IsDevelopment())
             {
-                app.UseExceptionHandler(errorApp =>
-                {
-                    //TODO: remove, setup only exception handling path
-                    //TODO: move logging logic into error page, RequestId and last error can be retrieved from HttpContext
-                    //RequestId = HttpContext.TraceIdentifier;
-                    //var error = HttpContext.Features.Get<IExceptionHandlerFeature>()?.Error;
-                    errorApp.Run(async context =>
-                    {
-                        await BuildCustomError(context);
-                    });
-                });
+                app.UseExceptionHandler("/Home/DevError");
             }
             else
             {
@@ -71,25 +61,6 @@ namespace NetCoreMentoring
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-        }
-
-        private async Task BuildCustomError(HttpContext context)
-        {
-            //TODO: remove this from startup, use custom error page
-            context.Response.StatusCode = 500;
-            context.Response.ContentType = "text/html";
-
-            await context.Response.WriteAsync("<html lang=\"en\"><body>\r\n");
-            await context.Response.WriteAsync("ERROR!<br>Please find more information in the log file<br>\r\n");
-
-            var exceptionHandlerPathFeature =
-                context.Features.Get<IExceptionHandlerPathFeature>();
-            _logger.LogError(exceptionHandlerPathFeature.Error, "Error is handled by custom handler.");
-
-            await context.Response.WriteAsync(exceptionHandlerPathFeature.Error.Message);
-            await context.Response.WriteAsync("<br><br><a href=\"/\">Home</a><br>\r\n");
-            await context.Response.WriteAsync("</body></html>\r\n");
-            await context.Response.WriteAsync(new string(' ', 512)); // IE padding
         }
 
         private void InjectDependences(IServiceCollection services)

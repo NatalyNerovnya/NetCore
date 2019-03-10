@@ -1,0 +1,17 @@
+﻿@model ErrorViewModel
+@{
+    ViewData["Title"] = "DevError";
+}
+
+<h1 class="text-danger">Error.</h1>
+<h2 class="text-danger">An error occurred while processing your request.</h2>
+<div>@Model.Error.Message</div>
+<br />
+<div>Please find more information in the log file</div>
+<br />
+
+<div>
+    <a asp-action="Index" asp-controller="Home">Home</a>
+</div>
+
+
