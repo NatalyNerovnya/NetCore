@@ -1,62 +1,68 @@
-﻿using Common.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using NetCoreMentoring.Models;
-using Product = Common.Models.Product;
+using NetCoreProject.Domain.Interfaces;
+using System.Threading.Tasks;
+using Product = NetCoreProject.Common.Product;
 
 namespace NetCoreMentoring.Controllers
 {
-    //TODO: async all-the-way from controller to repository
     public class ProductController : Controller
     {
-        //TODO: readonly?
-        private IProductService _productService;
+        private readonly IProductService _productService;
+        private readonly ICategoryService _categoryService;
+        private readonly ISupplierService _supplierService;
 
-        public ProductController(IProductService productService)
+        public ProductController(IProductService productService, ICategoryService categoryService, ISupplierService supplierService)
         {
             _productService = productService;
+            _categoryService = categoryService;
+            _supplierService = supplierService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var model = new ProductsViewModel()
             {
-                Products = _productService.GetProducts()
+                Products = await _productService.GetProductsAsync()
             };
 
             return View(model);
         }
 
         [HttpGet]
-        public IActionResult Add()
+        public async Task<IActionResult> Add()
         {
             ViewBag.Method = "Add";
-            var model = BuildAddEditProductModelByProductId(null);
+            var model = await BuildAddEditProductModelByProductIdAsync(null);
             return View("AddEditView", model);
         }
 
         [HttpPost]
-        public IActionResult Add(Product product)
-        {   
-            //TODO: validation is missing?
+        public async Task<IActionResult> Add(Product product)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Add");
+            }
 
             if (product != null)
             {
-                _productService.AddProduct(product);
+                await _productService.AddProductAsync(product);
             }
 
             return RedirectToAction("Index");
         }
 
         [HttpGet]
-        public IActionResult Edit(int productId)
+        public async Task<IActionResult> Edit(int productId)
         {
             ViewBag.Method = "Edit";
-            var model = BuildAddEditProductModelByProductId(productId);
+            var model = await BuildAddEditProductModelByProductIdAsync(productId);
             return View("AddEditView", model);
         }
 
         [HttpPost]
-        public IActionResult Edit(Product product)
+        public async Task<IActionResult> Edit(Product product)
         {
             if (!ModelState.IsValid)
             {
@@ -66,19 +72,19 @@ namespace NetCoreMentoring.Controllers
             //TODO: why product can be null? in any case if product is null you will get null-reference exception in statement above
             if (product != null)
             {
-                _productService.EditProduct(product);
+                await _productService.EditProductAsync(product);
             }
 
             return RedirectToAction("Index");
         }
 
-        private AddEditProductViewModel BuildAddEditProductModelByProductId(int? productId)
+        private async Task<AddEditProductViewModel> BuildAddEditProductModelByProductIdAsync(int? productId)
         {
             return new AddEditProductViewModel()
             {
-                Categories = _productService.GetCategories(),
-                Suppliers = _productService.GetSuppliers(),
-                Product = productId.HasValue ? _productService.GetProductById(productId.Value) : null
+                Categories = await _categoryService.GetCategoriesAsync(),
+                Suppliers = await _supplierService.GetSuppliersAsync(),
+                Product = productId.HasValue ? await _productService.GetProductByIdAsync(productId.Value) : null
             };
         }
     }

@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NetCoreMentoring.Models;
-using Common.Services;
+using NetCoreProject.Domain.Interfaces;
+using System.Threading.Tasks;
 
 namespace NetCoreMentoring.Controllers
 {
-    //TODO: async all-the-way from controller to repository
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;
@@ -14,10 +14,11 @@ namespace NetCoreMentoring.Controllers
             _categoryService = categoryService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var categories = await _categoryService.GetCategoriesAsync();
             var model = new CategoriesViewModel() {
-                Categories = _categoryService.GetAllCategories()
+                Categories = categories
             };
 
             return View(model);

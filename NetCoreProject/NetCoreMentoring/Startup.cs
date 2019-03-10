@@ -1,24 +1,19 @@
-﻿using Common.EntityFramework;
-using Common.Repositories;
-using Common.Services;
-using Common.Settings;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NetCoreProject.Domain.Installers;
 using System.Threading.Tasks;
 
 namespace NetCoreMentoring
 {
     public class Startup
     {
-        //TODO: access modifier, readonly
-        ILogger<Startup> _logger;
+        private readonly ILogger<Startup> _logger;
 
         public Startup(IConfiguration configuration, ILogger<Startup> logger)
         {
@@ -99,16 +94,8 @@ namespace NetCoreMentoring
 
         private void InjectDependences(IServiceCollection services)
         {
-            var connection = Configuration.GetConnectionString("NorthwindConnectionString");
-            services.AddDbContext<NorthwindContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connection));
-
-            services.AddTransient<ISettings, ConfigurationSettings>();
-
-            services.AddTransient<ICategoryRepository, CategoryRepository>();
-            services.AddTransient<ICategoryService, CategoryService>();
-
-            services.AddTransient<IProductRepository, ProductRepository>();
-            services.AddTransient<IProductService, ProductService>();
+            var domainInstaller = new DomainInstaller(Configuration);
+            domainInstaller.Install(services);
         }
     }
 }

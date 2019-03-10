@@ -1,4 +1,4 @@
-﻿using Common.Models;
+﻿using NetCoreProject.Common;
 using System.Collections.Generic;
 
 namespace NetCoreMentoring.Models
