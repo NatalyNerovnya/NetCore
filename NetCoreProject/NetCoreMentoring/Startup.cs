@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using NetCoreProject.Common;
 using NetCoreProject.Domain.Installers;
 
@@ -36,8 +37,10 @@ namespace NetCoreMentoring
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime, ILogger<Startup> logger)
         {
+            applicationLifetime.ApplicationStarted.Register(() => { OnApplicationStart(env, logger); });
+
             if (env.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/DevError");
@@ -66,6 +69,11 @@ namespace NetCoreMentoring
             domainInstaller.Install(services);
 
             services.AddTransient<IValidator<Product>, ProductValidator>();
+        }
+
+        private void OnApplicationStart(IHostingEnvironment hostingEnvironment, ILogger<Startup> logger)
+        {
+            logger.LogInformation($"Application is running : {hostingEnvironment.ContentRootPath}");
         }
     }
 }

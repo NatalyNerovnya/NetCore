@@ -69,12 +69,7 @@ namespace NetCoreMentoring.Controllers
                 return RedirectToAction("Edit", product.Id);
             }
 
-            //TODO: why product can be null? in any case if product is null you will get null-reference exception in statement above
-            if (product != null)
-            {
-                await _productService.EditProductAsync(product);
-            }
-
+            await _productService.EditProductAsync(product);
             return RedirectToAction("Index");
         }
 

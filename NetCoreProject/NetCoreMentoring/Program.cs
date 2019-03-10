@@ -2,33 +2,14 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog.Web;
-using System;
 
 namespace NetCoreMentoring
 {
-    //TODO: Refactor project structure. Introduce 3-layered architecture: UI - Domain - Data
     public class Program
     {
         public static void Main(string[] args)
         {
-            var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
-            try
-            {
-                var host = CreateWebHostBuilder(args).Build();
-
-                //TODO: use IApplicationLifetime to subscribe on app start/stop events
-                logger.Info($"Application is running: {AppDomain.CurrentDomain.BaseDirectory}");
-                host.Run();
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex, "Stopped program because of exception");
-                throw;
-            }
-            finally
-            {
-                NLog.LogManager.Shutdown();
-            }
+            CreateWebHostBuilder(args).Build().Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
