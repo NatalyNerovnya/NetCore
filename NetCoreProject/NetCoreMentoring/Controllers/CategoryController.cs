@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NetCoreMentoring.Models;
-using NetCoreProject.Common;
 using NetCoreProject.Domain.Interfaces;
 using System.IO;
 using System.Threading.Tasks;

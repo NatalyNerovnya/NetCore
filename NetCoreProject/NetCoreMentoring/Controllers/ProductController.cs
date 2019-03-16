@@ -45,10 +45,7 @@ namespace NetCoreMentoring.Controllers
                 return RedirectToAction("Add");
             }
 
-            if (product != null)
-            {
-                await _productService.AddProductAsync(product);
-            }
+            await _productService.AddProductAsync(product);
 
             return RedirectToAction("Index");
         }
@@ -70,7 +67,7 @@ namespace NetCoreMentoring.Controllers
             }
 
             await _productService.EditProductAsync(product);
-            return RedirectToAction("Index");
+            return View("Index");
         }
 
         private async Task<AddEditProductViewModel> BuildAddEditProductModelByProductIdAsync(int? productId)
