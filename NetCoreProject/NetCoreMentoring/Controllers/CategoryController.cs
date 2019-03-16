@@ -1,12 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using NetCoreMentoring.Models;
+using NetCoreProject.Common;
 using NetCoreProject.Domain.Interfaces;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace NetCoreMentoring.Controllers
 {
     public class CategoryController : Controller
     {
+        private const string ImageContentType = "image/bmp";
         private readonly ICategoryService _categoryService;
 
         public CategoryController(ICategoryService categoryService)
@@ -17,11 +21,45 @@ namespace NetCoreMentoring.Controllers
         public async Task<IActionResult> Index()
         {
             var categories = await _categoryService.GetCategoriesAsync();
-            var model = new CategoriesViewModel() {
+            var model = new CategoriesViewModel()
+            {
                 Categories = categories
             };
 
             return View(model);
-        }            
+        }
+
+        public async Task<IActionResult> GetImage(int categoryId)
+        {
+            var image = await _categoryService.GetImageByCategoryIdAsync(categoryId);
+
+            if (image == null)
+            {
+                return NotFound();
+            }
+
+            var stream = new MemoryStream(image);
+            return File(stream, ImageContentType);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UpdateImage(int categoryId)
+        {
+            var categoryViewModel = new UpdateCategoryViewModel()
+            {
+                Category = await _categoryService.GetCategoryByIdAsync(categoryId)
+            };
+
+            return View("UploadImageView", categoryViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateImage(IFormFile imageToUpload, int categoryId)
+        {
+            var stream = new MemoryStream();
+            await imageToUpload.CopyToAsync(stream);
+            await _categoryService.UpdateImageAsync(stream.ToArray(), categoryId);
+            return RedirectToAction("Index");
+        }
     }
 }

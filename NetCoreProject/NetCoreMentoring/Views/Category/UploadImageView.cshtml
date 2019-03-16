@@ -1,0 +1,20 @@
+﻿@model UpdateCategoryViewModel
+@{
+    ViewData["Title"] = "UploadImageView";
+}
+
+<h1>@Model.Category.Name</h1>
+
+<form method="post" enctype="multipart/form-data" asp-action="UpdateImage" asp-route-categoryId="@Model.Category.Id">
+    <div class="form-group">
+        <div class="col-md-10">
+            <p>Upload new image:</p>
+            <input type="file" name="imageToUpload" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-10">
+            <input type="submit" value="Upload"/>
+        </div>
+    </div>
+</form>

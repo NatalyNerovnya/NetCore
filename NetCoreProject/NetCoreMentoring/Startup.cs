@@ -31,7 +31,9 @@ namespace NetCoreMentoring
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddMvc().AddFluentValidation().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(options => options.RespectBrowserAcceptHeader = true)
+                .AddFluentValidation()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             InjectDependences(services);
         }

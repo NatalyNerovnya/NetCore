@@ -19,5 +19,20 @@ namespace NetCoreProject.Domain.Services
         {
             return await _categoryRepository.GetCategoriesAsync();
         }
+
+        public async Task<Category> GetCategoryByIdAsync(int categoryId)
+        {
+            return await _categoryRepository.GetCategoryByIdAsync(categoryId);
+        }
+
+        public async Task<byte[]> GetImageByCategoryIdAsync(int categoryId)
+        {
+            return await _categoryRepository.GetImageByCategoryIdAsync(categoryId);
+        }
+
+        public async Task UpdateImageAsync(byte[] imageToUpload, int categoryId)
+        {
+            await _categoryRepository.UpdateImageAsync(imageToUpload, categoryId);
+        }
     }
 }
