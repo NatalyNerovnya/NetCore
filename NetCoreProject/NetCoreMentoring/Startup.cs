@@ -62,6 +62,11 @@ namespace NetCoreMentoring
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapRoute(
+                    name: "images",
+                    template: "images/{categoryId}",
+                    defaults: new { controller = "Category", action = "GetImage" });
             });
         }
 
