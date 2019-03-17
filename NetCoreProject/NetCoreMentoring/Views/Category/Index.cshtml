@@ -7,7 +7,7 @@
     {
     <li class="list-group-item">
         <p>@category.Name</p>
-        <img class="category-img" src="@Url.Action("GetImage", new {categoryId = category.Id})" />
+        <img class="category-img" src="@Url.Action("GetImage", new {id = category.Id})" />
         <a asp-action="UpdateImage" asp-route-categoryId="@category.Id">Update image</a>
     </li>
     }

@@ -28,9 +28,9 @@ namespace NetCoreMentoring.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> GetImage(int categoryId)
+        public async Task<IActionResult> GetImage(int id)
         {
-            var image = await _categoryService.GetImageByCategoryIdAsync(categoryId);
+            var image = await _categoryService.GetImageByCategoryIdAsync(id);
 
             if (image == null)
             {

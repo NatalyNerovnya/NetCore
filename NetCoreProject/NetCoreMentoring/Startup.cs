@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NetCoreMentoring.Middleware;
 using NetCoreProject.Common;
 using NetCoreProject.Domain.Installers;
 
@@ -43,6 +44,8 @@ namespace NetCoreMentoring
         {
             applicationLifetime.ApplicationStarted.Register(() => { OnApplicationStart(env, logger); });
 
+            app.UseMiddleware<CacheImageMiddleware>();
+
             if (env.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/DevError");
@@ -52,6 +55,8 @@ namespace NetCoreMentoring
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
+            
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -65,7 +70,7 @@ namespace NetCoreMentoring
 
                 routes.MapRoute(
                     name: "images",
-                    template: "images/{categoryId}",
+                    template: "images/{id}",
                     defaults: new { controller = "Category", action = "GetImage" });
             });
         }
