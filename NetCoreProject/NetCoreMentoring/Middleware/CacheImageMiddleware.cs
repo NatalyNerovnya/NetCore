@@ -11,7 +11,6 @@ namespace NetCoreMentoring.Middleware
     public class CacheImageMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly IConfiguration _configuration;
 
         private readonly Timer _timer;
         private readonly string _cacheImagePath;
@@ -21,7 +20,6 @@ namespace NetCoreMentoring.Middleware
         public CacheImageMiddleware(RequestDelegate requestDelegate, IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             _next = requestDelegate;
-            _configuration = configuration;
             _cacheImagePath = configuration.GetValue<string>("CacheImageFolder")
                 ?? Path.Combine(hostingEnvironment.WebRootPath, "cache");
             _maxCacheNumber = configuration.GetValue<int>("MaxCacheNumber");

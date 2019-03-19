@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NetCoreMentoring.Filters;
 using NetCoreMentoring.Middleware;
 using NetCoreProject.Common;
 using NetCoreProject.Domain.Installers;
@@ -32,7 +33,12 @@ namespace NetCoreMentoring
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddMvc(options => options.RespectBrowserAcceptHeader = true)
+            services.AddMvc(options =>
+                {
+                    options.RespectBrowserAcceptHeader = true;
+                    options.Filters.Add(new LoggingFilterFactory());
+
+                })
                 .AddFluentValidation()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
