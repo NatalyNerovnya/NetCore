@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NetCoreMentoring.Filters;
+using NetCoreMentoring.Infrastructure;
 using NetCoreMentoring.Middleware;
 using NetCoreProject.Common;
 using NetCoreProject.Domain.Installers;
@@ -87,6 +88,7 @@ namespace NetCoreMentoring
             domainInstaller.Install(services);
 
             services.AddTransient<IValidator<Product>, ProductValidator>();
+            services.AddSingleton<IImageCache, InMemoryImageCache>();
         }
 
         private void OnApplicationStart(IHostingEnvironment hostingEnvironment, ILogger<Startup> logger)
