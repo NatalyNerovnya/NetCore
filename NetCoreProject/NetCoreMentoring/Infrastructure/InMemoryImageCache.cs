@@ -62,6 +62,7 @@ namespace NetCoreMentoring.Infrastructure
                 await fileStream.CopyToAsync(stream);
             }
 
+            stream.Seek(0, SeekOrigin.Begin);
             return stream;
         }
 

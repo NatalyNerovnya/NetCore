@@ -38,7 +38,6 @@ namespace NetCoreMentoring.Middleware
                     else
                     {
                         stream.Seek(0, SeekOrigin.Begin);
-                        cachedImage.Seek(0, SeekOrigin.Begin);
                         await cachedImage.CopyToAsync(stream);
                     }                  
                 }
