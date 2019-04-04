@@ -1,65 +1,71 @@
-﻿using System.IO;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Timers;
+using System.Threading;
 using Microsoft.Extensions.Configuration;
 
 namespace NetCoreMentoring.Infrastructure
 {
     public class InMemoryImageCache : IImageCache
     {
-        private readonly Timer _timer;
         private readonly string _cacheImagePath;
         private readonly int _maxCacheNumber;
+        private readonly int _cacheValidTimeMilliseconds;
+        private static readonly object LockReadObject = new object();
+        private static readonly object LockWriteObject = new object();
 
         public InMemoryImageCache(IConfiguration configuration)
         {
             _cacheImagePath = configuration.GetValue<string>("CacheImageFolder");
             _maxCacheNumber = configuration.GetValue<int>("MaxCacheNumber");
-
-            _timer = new Timer()
-            {
-                Interval = configuration.GetValue<int>("CacheExpirationTime"),
-                AutoReset = false
-            };
-            _timer.Elapsed += (s, e) => OnTimerElapsed();
-
+            _cacheValidTimeMilliseconds = configuration.GetValue<int>("CacheExpirationTime");
+            
             if (!Directory.Exists(_cacheImagePath))
             {
                 Directory.CreateDirectory(_cacheImagePath);
             }
         }
 
-        public async Task AddAsync(MemoryStream imageStream, string key)
+        public void Add(MemoryStream imageStream, string key)
         {
-            ResetTimer();
-
             var filesNumber = Directory.EnumerateFiles(_cacheImagePath).Count();
             if (filesNumber < _maxCacheNumber)
             {
                 var filePath = GetFilePath(key);
-                using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+
+                lock (LockWriteObject)
                 {
-                    await fileStream.WriteAsync(imageStream.ToArray());
+                    using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                    {
+                        fileStream.Write(imageStream.ToArray());
+                    } 
                 }
             }
         }
 
-        public async Task<Stream> GetAsync(string key)
+        public Stream Get(string key)
         {
-            ResetTimer();
-
             var filePath = GetFilePath(key);
             if (!File.Exists(filePath))
             {
                 return null;
             }
 
+            if (!IsCachedFileValid(filePath))
+            {
+                RemoveFile(filePath);
+                return null;
+            }
+
             var stream = new MemoryStream();
 
-            using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+            lock (LockReadObject)
             {
-                await fileStream.CopyToAsync(stream);
+                using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                {
+                    fileStream.CopyTo(stream);
+                }
             }
 
             stream.Seek(0, SeekOrigin.Begin);
@@ -71,19 +77,15 @@ namespace NetCoreMentoring.Infrastructure
             return Path.Combine(_cacheImagePath, key) + ".bmp";
         }
 
-        private void OnTimerElapsed()
+        private bool IsCachedFileValid(string filePath)
         {
-            foreach (var filePath in Directory.EnumerateFiles(_cacheImagePath))
-            {
-                var fileInfo = new FileInfo(filePath);
-                fileInfo.Delete();
-            }
+            return (DateTime.UtcNow - File.GetCreationTimeUtc(filePath)).TotalMilliseconds < _cacheValidTimeMilliseconds;
         }
 
-        private void ResetTimer()
+        private void RemoveFile(string filePath)
         {
-            _timer.Stop();
-            _timer.Start();
+            var fileInfo = new FileInfo(filePath);
+            fileInfo.Delete();
         }
     }
 }
