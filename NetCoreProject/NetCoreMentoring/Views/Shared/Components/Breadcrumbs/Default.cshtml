@@ -1,0 +1,13 @@
+﻿@model BreadcrumbsViewModel
+
+<nav aria-label="breadcrumb">
+    <div class="container">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+            @foreach (var crumb in Model.Breadcrumbs)
+            {
+                <li class="breadcrumb-item"><a href="@crumb.Value">@crumb.Key</a></li>
+            }
+        </ol>
+    </div>
+</nav>
