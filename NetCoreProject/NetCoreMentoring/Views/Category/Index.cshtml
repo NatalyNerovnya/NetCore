@@ -2,16 +2,24 @@
 
 <h1>Categories</h1>
 
-<ul class="list-group categories">
-    @foreach (var category in Model.Categories)
-    {
-        <li class="list-group-item">
-            <p>@category.Name</p>
-            <img class="category-img" src="@Url.Action("GetImage", new {id = category.Id})" />
-            <a asp-action="UpdateImage" asp-route-categoryId="@category.Id">Update image</a>
-        </li>
-    }
-</ul>
+@foreach (var category in Model.Categories)
+{
+    <div class="card category">
+        <img class="category-img" src="@Url.Action("GetImage", new {id = category.Id})" />
+        <div class="card-body">
+            <h5 class="card-title">@category.Name</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <a northwind-id="@category.Id">@category.Name TagHelper</a>
+                @Html.NorthwindImageLink(category.Id,category.Name + " HtmlHeler")
+            </li>
+        </ul>
+        <div class="card-body">
+            <a asp-action="Update Image" asp-route-categoryId="@category.Id">Update image</a>
+        </div>
+    </div>
+}
 
 @section Footer {
     <p>Categories editing is forbidden by our site rules.</p>

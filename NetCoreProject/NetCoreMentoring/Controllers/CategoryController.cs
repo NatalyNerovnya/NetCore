@@ -42,6 +42,7 @@ namespace NetCoreMentoring.Controllers
         }
 
         [HttpGet]
+        [ActionName("Update Image")]
         public async Task<IActionResult> UpdateImage(int categoryId)
         {
             var categoryViewModel = new UpdateCategoryViewModel()
