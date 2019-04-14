@@ -39,6 +39,7 @@ namespace NetCoreWebApi
             }
 
             app.UseHttpsRedirection();
+            app.UseCors(builder => builder.AllowAnyOrigin());
             app.UseMvc();
         }
 

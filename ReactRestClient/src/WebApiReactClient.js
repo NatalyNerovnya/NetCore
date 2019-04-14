@@ -1,30 +1,21 @@
-import React, { Component } from 'react';
+class WebApiReactClient{
 
-class WebApiReactClient extends Component{
-
-    constructor(props){
-        super(props);
-        this.state = { resultData: [] };
-        this.baseUri = '';
+    constructor(){
+        this.baseUri = 'https://localhost:44336/api';
     };
 
     getCategories() {
-        let uri = this.baseUri + 'categories';
-        this.componentDidMount(uri);
-        return this.state;
+        let uri = this.baseUri + '/category';
+        return this.getData(uri);
     };
 
     getProducts() {
-        debugger;
-        let uri = 'https://baconipsum.com/api/?type=meat-and-filler';
-        this.componentDidMount(uri);
-        return this.state;
+        let uri = this.baseUri + '/product';   
+        return this.getData(uri);
     };
 
-    componentDidMount(){
-        fetch('https://baconipsum.com/api/?type=meat-and-filler')
-            .then(res => res.json())
-            .then(json => this.setState({resultData : json}));
+    getData(uri){
+        return fetch(uri).then(res => res.json());
     }
 }
 
