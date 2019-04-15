@@ -10,5 +10,6 @@ namespace NetCoreProject.Domain.Interfaces
         Task<Product> GetProductByIdAsync(int id);
         Task AddProductAsync(Product product);
         Task EditProductAsync(Product product);
+        Task DeleteProductAsync(int productId);
     }
 }

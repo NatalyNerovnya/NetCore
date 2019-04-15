@@ -29,5 +29,33 @@ namespace NetCoreMentoring.Controllers
 
             return Ok(categories);
         }
+
+        [HttpGet]
+        [Route("image")]
+        public async Task<ActionResult<byte[]>> GetImageBytesByIdAsync(int categoryId)
+        {
+            var image = await _categoryService.GetImageByCategoryIdAsync(categoryId);
+            if (image == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(image);
+        }
+        
+        [HttpPost]
+        [Route("image")]
+        public async Task<ActionResult> UpdateImageByIdAsync(int categoryId, [FromBody] byte[] imageBytes)
+        {
+            var category = await _categoryService.GetCategoryByIdAsync(categoryId);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            await _categoryService.UpdateImageAsync(imageBytes, categoryId);
+            
+            return Ok();
+        }
     }
 }

@@ -29,5 +29,46 @@ namespace NetCoreMentoring.Controllers
 
             return Ok(products);
         }
+
+        // POST api/product
+        [HttpPost]
+        public async Task<ActionResult<Product>> Create(Product product)
+        {
+            if(product == null)
+            {
+                return BadRequest();
+            }
+
+            await _productService.AddProductAsync(product);
+
+            return Created(Request.Path, product);
+        }
+
+        // PUT api/product
+        [HttpPut]
+        public async Task<ActionResult> Update(Product product)
+        { 
+            if (product == null)
+            {
+                return BadRequest();
+            }
+
+            await _productService.EditProductAsync(product);
+            return NoContent();
+        }
+
+        // DELETE api/product
+        [HttpDelete]
+        public async Task<ActionResult> Delete(int productId)
+        {
+            var product = await _productService.GetProductByIdAsync(productId);
+            if (product == null)
+            {
+                return BadRequest();
+            }
+
+            await _productService.DeleteProductAsync(productId);
+            return NoContent();
+        }
     }
 }

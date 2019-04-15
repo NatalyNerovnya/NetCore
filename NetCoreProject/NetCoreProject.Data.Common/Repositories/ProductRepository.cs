@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using NetCoreProject.Data.Common.Interfaces;
 using NetCoreProject.Data.EFModels;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Product = NetCoreProject.Common.Product;
@@ -23,6 +22,13 @@ namespace NetCoreProject.Data.Common.Repositories
         public async Task AddProductAsync(Product product)
         {
             await _context.Products.AddAsync(_mapper.Map<Products>(product));
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteProductAsync(int productId)
+        {
+            var product = await _context.Products.FirstOrDefaultAsync(x => x.ProductId == productId);
+            _context.Products.Remove(product);
             await _context.SaveChangesAsync();
         }
 

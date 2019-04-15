@@ -45,5 +45,10 @@ namespace NetCoreProject.Domain.Services
         {
             await _productRepository.EditProductAsync(product);
         }
+
+        public async Task DeleteProductAsync(int productId)
+        {
+            await _productRepository.DeleteProductAsync(productId);
+        }
     }
 }
