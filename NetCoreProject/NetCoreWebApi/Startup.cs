@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NetCoreProject.Domain.Installers;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace NetCoreWebApi
 {
@@ -22,6 +23,11 @@ namespace NetCoreWebApi
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "NetCoreWebApi project", Version = "v1" });
+            });
+
             InjectDependencies(services);
         }
 
@@ -38,6 +44,12 @@ namespace NetCoreWebApi
                 app.UseHsts();
             }
 
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "NetCoreWebApi project");
+                c.RoutePrefix = string.Empty;
+            });
             app.UseHttpsRedirection();
             app.UseCors(builder => builder.AllowAnyOrigin());
             app.UseMvc();
