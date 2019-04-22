@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using NetCoreProject.Data.Common.Interfaces;
 using NetCoreProject.Data.EFModels;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Castle.Core.Internal;
 using Product = NetCoreProject.Common.Product;
 
 namespace NetCoreProject.Data.Common.Repositories
@@ -27,8 +29,15 @@ namespace NetCoreProject.Data.Common.Repositories
 
         public async Task DeleteProductAsync(int productId)
         {
-            var product = await _context.Products.FirstOrDefaultAsync(x => x.ProductId == productId);
+            var product = await _context.Products.FindAsync(productId);
+            if (product == null)
+            {
+                return;
+            }
+
+            await RemoveOrderDetails(productId);
             _context.Products.Remove(product);
+
             await _context.SaveChangesAsync();
         }
 
@@ -48,6 +57,15 @@ namespace NetCoreProject.Data.Common.Repositories
         {
             var products = await _context.Products.ToListAsync();
             return _mapper.Map<IEnumerable<Product>>(products);
+        }
+
+        private async Task RemoveOrderDetails(int productId)
+        {
+            var orderDetails = await _context.OrderDetails.Where(x => x.ProductId == productId).ToListAsync();
+            if (!orderDetails.IsNullOrEmpty())
+            {
+                _context.OrderDetails.RemoveRange(orderDetails);
+            }
         }
     }
 }
