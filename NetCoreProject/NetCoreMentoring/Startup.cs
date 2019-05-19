@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -64,10 +63,9 @@ namespace NetCoreMentoring
                 app.UseHsts();
             }
 
-            
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseCookiePolicy();
 
             app.UseMvc(routes =>

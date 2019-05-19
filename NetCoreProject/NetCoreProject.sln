@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCoreWebApiClient", "NetC
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebApiTests", "WebApiTests", "{F723FF6F-4323-40D7-BC4A-59151E179FE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCoreWebApiTestClient", "NetCoreWebApiTestClient\NetCoreWebApiTestClient.csproj", "{2FA963E2-06B8-4E92-8E22-017860344F4D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCoreWebApiTestClient", "NetCoreWebApiTestClient\NetCoreWebApiTestClient.csproj", "{2FA963E2-06B8-4E92-8E22-017860344F4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

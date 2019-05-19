@@ -24,12 +24,12 @@ namespace NetCoreMentoring.ViewComponents
         {
             var breadcrumbs = new Dictionary<string, string>();
 
-            var controller = ViewContext.RouteData.Values["controller"].ToString();
-            var action = ViewContext.RouteData.Values["action"].ToString();
+            var controller = ViewContext.RouteData.Values["controller"]?.ToString() ?? string.Empty;
+            var action = ViewContext.RouteData.Values["action"]?.ToString() ?? string.Empty;
 
             breadcrumbs.Add(controller, Url.Action(defaultActionName, controller));
 
-            if (!action.Equals(defaultActionName, StringComparison.InvariantCultureIgnoreCase))
+            if (!action.Equals(defaultActionName, StringComparison.InvariantCultureIgnoreCase) && !breadcrumbs.ContainsKey(action))
             {
                 breadcrumbs.Add(action, HttpContext.Request.Path + HttpContext.Request.QueryString);
             }           
