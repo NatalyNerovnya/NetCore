@@ -5,12 +5,12 @@ class WebApiReactClient{
     };
 
     getCategories() {
-        let uri = this.baseUri + '/category';
+        let uri = this.baseUri + '/categories';
         return this.getData(uri);
     };
 
     getProducts() {
-        let uri = this.baseUri + '/product';   
+        let uri = this.baseUri + '/products';   
         return this.getData(uri);
     };
 

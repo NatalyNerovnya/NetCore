@@ -38,6 +38,7 @@ namespace NetCoreProject.Domain.Services
 
         public async Task AddProductAsync(Product product)
         {
+            product.Id = null;
             await _productRepository.AddProductAsync(product);
         }
 

@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using NetCoreProject.Common;
 using NetCoreProject.Domain.Interfaces;
 
-namespace NetCoreMentoring.Controllers
+namespace NetCoreWebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     [ApiController]
     public class CategoryController : ControllerBase
     {
@@ -17,8 +17,9 @@ namespace NetCoreMentoring.Controllers
             _categoryService = categoryService;
         }
 
-        // GET api/category
+        // GET api/categories
         [HttpGet]
+        [Route("categories")]
         public async Task<ActionResult<IEnumerable<Category>>> Get()
         {
             var categories = await _categoryService.GetCategoriesAsync();
@@ -31,10 +32,10 @@ namespace NetCoreMentoring.Controllers
         }
 
         [HttpGet]
-        [Route("image")]
-        public async Task<ActionResult<byte[]>> GetImageBytesByIdAsync(int categoryId)
+        [Route("categories/{id}")]
+        public async Task<ActionResult<byte[]>> GetImageBytesByIdAsync(int id)
         {
-            var image = await _categoryService.GetImageByCategoryIdAsync(categoryId);
+            var image = await _categoryService.GetImageByCategoryIdAsync(id);
             if (image == null)
             {
                 return NotFound();
@@ -44,16 +45,16 @@ namespace NetCoreMentoring.Controllers
         }
         
         [HttpPost]
-        [Route("image")]
-        public async Task<ActionResult> UpdateImageByIdAsync(int categoryId, [FromBody] byte[] imageBytes)
+        [Route("categories/{id}")]
+        public async Task<ActionResult> UpdateImageByIdAsync(int id, [FromBody] byte[] imageBytes)
         {
-            var category = await _categoryService.GetCategoryByIdAsync(categoryId);
+            var category = await _categoryService.GetCategoryByIdAsync(id);
             if (category == null)
             {
                 return NotFound();
             }
 
-            await _categoryService.UpdateImageAsync(imageBytes, categoryId);
+            await _categoryService.UpdateImageAsync(imageBytes, id);
             
             return Ok();
         }

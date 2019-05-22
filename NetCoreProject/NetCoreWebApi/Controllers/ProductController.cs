@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using NetCoreProject.Common;
 using NetCoreProject.Domain.Interfaces;
 
-namespace NetCoreMentoring.Controllers
+namespace NetCoreWebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -17,8 +17,9 @@ namespace NetCoreMentoring.Controllers
             _productService = productService;
         }
 
-        // GET api/product
+        // GET api/products
         [HttpGet]
+        [Route("products")]
         public async Task<ActionResult<IEnumerable<Product>>> Get()
         {
             var products = await _productService.GetProductsAsync();
@@ -30,11 +31,12 @@ namespace NetCoreMentoring.Controllers
             return Ok(products);
         }
 
-        // POST api/product
+        // POST api/products
         [HttpPost]
+        [Route("products")]
         public async Task<ActionResult<Product>> Create(Product product)
         {
-            if(product == null)
+            if(product == null || !ModelState.IsValid)
             {
                 return BadRequest();
             }
@@ -44,11 +46,12 @@ namespace NetCoreMentoring.Controllers
             return Created(Request.Path, product);
         }
 
-        // PUT api/product
+        // PUT api/products
         [HttpPut]
-        public async Task<ActionResult> Update(Product product)
+        [Route("products/{id}")]
+        public async Task<ActionResult> Update(int id, Product product)
         { 
-            if (product == null)
+            if (product == null || !ModelState.IsValid || id != product.Id)
             {
                 return BadRequest();
             }
@@ -57,17 +60,18 @@ namespace NetCoreMentoring.Controllers
             return NoContent();
         }
 
-        // DELETE api/product
+        // DELETE api/products/1
         [HttpDelete]
-        public async Task<ActionResult> Delete(int productId)
+        [Route("products/{id}")]
+        public async Task<ActionResult> Delete(int id)
         {
-            var product = await _productService.GetProductByIdAsync(productId);
+            var product = await _productService.GetProductByIdAsync(id);
             if (product == null)
             {
                 return BadRequest();
             }
 
-            await _productService.DeleteProductAsync(productId);
+            await _productService.DeleteProductAsync(id);
             return NoContent();
         }
     }

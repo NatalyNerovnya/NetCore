@@ -12,8 +12,8 @@ namespace NetCoreWebApiClient
     public class Client : IClient
     {
         private readonly HttpClient _httpClient;
-        private const string CategoryUri = "/api/category";
-        private const string ProductUri = "/api/product";
+        private const string CategoryUri = "/api/categories";
+        private const string ProductUri = "/api/products";
         private const string BaseUriConfigurationName = "NetCoreWebApi.URI";
 
         public Client(IConfiguration configuration)
