@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +19,7 @@ namespace NetCoreMentoring.Areas.Identity
                         context.Configuration.GetConnectionString("AccountContextConnection")));
 
                 services.AddDefaultIdentity<User>()
+                    .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<AccountContext>();
             });
         }
