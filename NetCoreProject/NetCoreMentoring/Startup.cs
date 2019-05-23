@@ -1,9 +1,14 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.AzureAD.UI;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -34,10 +39,20 @@ namespace NetCoreMentoring
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddAuthentication().AddOpenIdConnect(AzureADDefaults.AuthenticationScheme,
+                "AzureAD", options =>
+                {
+                    Configuration.Bind("AzureAd", options);
+                });
+
             services.AddMvc(options =>
                 {
                     options.RespectBrowserAcceptHeader = true;
                     options.Filters.Add(new LoggingFilterFactory());
+                    var policy = new AuthorizationPolicyBuilder()
+                        .RequireAuthenticatedUser()
+                        .Build();
+                    options.Filters.Add(new AuthorizeFilter(policy));
 
                 })
                 .AddFluentValidation()
@@ -63,6 +78,7 @@ namespace NetCoreMentoring
                 app.UseHsts();
             }
 
+            app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();
