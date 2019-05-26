@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 
 namespace NetCoreMentoring.Infrastructure
@@ -15,9 +16,9 @@ namespace NetCoreMentoring.Infrastructure
         private static readonly object LockReadObject = new object();
         private static readonly object LockWriteObject = new object();
 
-        public InMemoryImageCache(IConfiguration configuration)
+        public InMemoryImageCache(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
-            _cacheImagePath = configuration.GetValue<string>("CacheImageFolder");
+            _cacheImagePath = Path.Combine(hostingEnvironment.WebRootPath, "images");
             _maxCacheNumber = configuration.GetValue<int>("MaxCacheNumber");
             _cacheValidTimeMilliseconds = configuration.GetValue<int>("CacheExpirationTime");
             
