@@ -77,9 +77,9 @@ namespace NetCoreMentoring
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-
-            app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
-            app.UseHttpsRedirection();
+            //fixing ERR_TOO_MANY_REDIRECTS on linux
+            //app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseCookiePolicy();
